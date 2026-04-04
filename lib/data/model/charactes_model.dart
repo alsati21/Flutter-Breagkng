@@ -7,13 +7,13 @@ class CharactersModel {
   String? gender;
   Origin? origin;
   Location? location;
-  String? image;
+  late String image;
   List<String>? episode;
   String? url;
   String? created;
 
   CharactersModel(
-      {this.id, this.name, this.status, this.species, this.type, this.gender, this.origin, this.location, this.image, this.episode, this.url, this.created});
+      {this.id, this.name, this.status, this.species, this.type, this.gender, this.origin, this.location, required this.image, this.episode, this.url, this.created});
 
   CharactersModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];

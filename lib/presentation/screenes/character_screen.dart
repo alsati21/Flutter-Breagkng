@@ -11,12 +11,53 @@ class CharacterScreen extends StatefulWidget {
   State<CharacterScreen> createState() => _CharacterScreenState();
 }
 class _CharacterScreenState extends State<CharacterScreen> {
-    late List<CharactersModel>allCharacters;
+     List<CharactersModel>allCharacters=[];
+    late List<CharactersModel>searchCharacters;
+    bool _isSearching=false;
+    final _searchTextController=TextEditingController();
+    Widget _buildSearch()
+    {
+      return  TextField(
+        controller: _searchTextController,
+        cursorColor: myColors.gray,
+        decoration: InputDecoration(
+          hintText: 'find a characters...',
+          border: InputBorder.none,
+          hintStyle: TextStyle(
+            color: myColors.gray,
+            fontSize: 18,
+
+          ),
+
+        ),
+        style: TextStyle(color: myColors.gray,fontSize: 18),
+        onChanged: (search)
+        {
+          addItemToSearchCharactersList(search);
+
+        },
+
+
+      );
+    }
+    void addItemToSearchCharactersList(String search)
+    {
+      searchCharacters=allCharacters
+          .where((character)=>character.name!.toLowerCase().startsWith(search)).toList();
+
+  setState(() {
+
+  });
+
+    }
+
+
+
   @override
-  void initState()
-  {
+
+  void initState() {
     super.initState();
-    allCharacters=BlocProvider.of<CharacterCubit>(context).getAllCharacters();
+    BlocProvider.of<CharacterCubit>(context).getAllCharacters();
   }
   Widget builBlocWidget()
   {
@@ -42,41 +83,32 @@ return const Center(
 
     });
   }
-  Widget buildLoadedListWidgets()
-  {
-return SingleChildScrollView(
-  child: Container(
-    color: myColors.gray,
-    child: Column(
-children: [
+    Widget buildLoadedListWidgets() {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
+                childAspectRatio: 2 / 3,
+              ),
+              itemCount: allCharacters.length,
+              itemBuilder: (context, index) {
+                return CharactersItem(
+                  charactersModel: allCharacters[index],
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
 
-GridView.builder(
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
-  (
-    crossAxisCount: 2,
-  crossAxisSpacing:1,
-  childAspectRatio: 2/3,
-  mainAxisSpacing: 1
-),
-
-    itemBuilder:(contxt,index)
-    {
-      return CharactersItem();
-
-
-    } )
-
-],
-
-
-    ) ,
-
-  ),
-
-);
-  }
-
-
+  @override
   Widget build(BuildContext context)
 
   {
@@ -85,7 +117,7 @@ GridView.builder(
       backgroundColor: myColors.yellow,
       title: const Text(
         'Characters',
-        style: TextStyle(color: myColors.gray),
+        style: TextStyle(color: myColors.whit),
       ),
 
     ),

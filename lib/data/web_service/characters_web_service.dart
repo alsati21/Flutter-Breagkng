@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:untitled/constans/strings.dart';
 
+import '../model/charactes_model.dart';
+
 class CharactersWebService
 {
   late Dio dio;
@@ -15,15 +17,13 @@ class CharactersWebService
       dio =Dio(options);
   }
 
-  Future<List<dynamic>>getAllCharacters()async
-  {
-    try {
-      Response response = await dio.get('character');
-      print(response.data.toString());
-      return response.data;
+  Future<List<dynamic>> getAllCharacters() async {
+    try
+    {
+    final response = await dio.get('character');
 
-
-    }
+    return response.data['results'];
+  }
     catch(e)
     {
       print(e.toString());

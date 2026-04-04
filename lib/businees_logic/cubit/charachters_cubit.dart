@@ -8,7 +8,7 @@ import 'charachters_state.dart';
 class CharacterCubit extends Cubit<CharactersState>
 {
   CharactersRepository charactersRepository;
- late List<CharactersModel>characters;
+  List<CharactersModel>characters=[];
   CharacterCubit(this.charactersRepository):super(CharactersInitial());
   List<CharactersModel>getAllCharacters()
   {

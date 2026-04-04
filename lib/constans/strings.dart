@@ -1,3 +1,3 @@
-const baseUrl='https://www.breakingbadapi.com/api/';
+const baseUrl='https://rickandmortyapi.com/api/';
 const charactersScreen='/';
 const ditiles='/ditiles';
