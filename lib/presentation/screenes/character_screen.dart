@@ -20,7 +20,7 @@ class _CharacterScreenState extends State<CharacterScreen> {
       return  TextField(
         controller: _searchTextController,
         cursorColor: myColors.gray,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'find a characters...',
           border: InputBorder.none,
           hintStyle: TextStyle(
@@ -30,7 +30,7 @@ class _CharacterScreenState extends State<CharacterScreen> {
           ),
 
         ),
-        style: TextStyle(color: myColors.gray,fontSize: 18),
+        style: const TextStyle(color: myColors.gray,fontSize: 18),
         onChanged: (search)
         {
           addItemToSearchCharactersList(search);
@@ -42,15 +42,52 @@ class _CharacterScreenState extends State<CharacterScreen> {
     }
     void addItemToSearchCharactersList(String search)
     {
-      searchCharacters=allCharacters
-          .where((character)=>character.name!.toLowerCase().startsWith(search)).toList();
+      searchCharacters=allCharacters.where((character)=>character.name!.toLowerCase().startsWith(search.toLowerCase())).toList();
 
   setState(() {
 
   });
 
     }
+    List<Widget>buildAppBarAction()
+     {
+       if(_isSearching)
+         {
+           return [IconButton(onPressed: (){clear();Navigator.pop(context);}, icon: const Icon(Icons.clear,color: myColors.gray,))];
+         }
+       else
+         {
+           return [IconButton(onPressed: startSearch,
 
+
+
+               icon: const Icon(Icons.search,color: myColors.gray,))];
+         }
+   }
+void startSearch()
+{
+  ModalRoute.of(context)!.addLocalHistoryEntry(LocalHistoryEntry(onRemove:stopSearch ));
+  setState(() {
+    _isSearching=true;
+  });
+
+}
+void stopSearch()
+{
+  setState(() {
+    _isSearching=false;
+    clear();
+  });
+
+}
+void clear()
+{
+  setState(() {
+    _searchTextController.clear();
+
+  });
+
+}
 
 
   @override
@@ -96,10 +133,10 @@ return const Center(
                 mainAxisSpacing: 1,
                 childAspectRatio: 2 / 3,
               ),
-              itemCount: allCharacters.length,
+              itemCount:_searchTextController.text.isEmpty? allCharacters.length:searchCharacters.length,
               itemBuilder: (context, index) {
                 return CharactersItem(
-                  charactersModel: allCharacters[index],
+                  charactersModel:_searchTextController.text.isEmpty? allCharacters[index]:searchCharacters[index],
                 );
               },
             ),
@@ -114,11 +151,14 @@ return const Center(
   {
     return  Scaffold(
     appBar: AppBar(
+      leading: _isSearching?const BackButton(color: myColors.gray,):Container(),
       backgroundColor: myColors.yellow,
-      title: const Text(
+      title: _isSearching?_buildSearch(): const Text(
         'Characters',
-        style: TextStyle(color: myColors.whit),
+        style: TextStyle(color: myColors.gray),
+
       ),
+      actions: buildAppBarAction(),
 
     ),
       body:builBlocWidget() ,
