@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/businees_logic/cubit/charachters_cubit.dart';
+import 'package:untitled/data/model/charactes_model.dart';
 import 'package:untitled/data/web_service/characters_web_service.dart';
 import 'package:untitled/presentation/screenes/character_screen.dart';
 import 'package:untitled/presentation/screenes/ditiles.dart';
@@ -23,14 +24,12 @@ class AppRouter
      case charactersScreen:
        return MaterialPageRoute(builder: (_)=>
        BlocProvider(create: (BuildContext contxt)=>characterCubit,
-         child: CharacterScreen(),
-
+         child: const CharacterScreen(),
        ),
-
-
        );
      case ditiles:
-       return MaterialPageRoute(builder: (_)=>Ditiles());
+      final character =settings.arguments as CharactersModel;
+       return MaterialPageRoute(builder: (_)=>Ditiles(charactersModel: character,));
    }
 
   }
